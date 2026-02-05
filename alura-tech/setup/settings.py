@@ -131,8 +131,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
-
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'templates/static')]
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SOCIALACCOUNT_PROVIDERS = {
     'github': {
@@ -143,3 +143,20 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+
+LOGIN_REDIRECT_URL = '/members'
+LOGOUT_REDIRECT_URL = '/'
+SOCIALACCOUNT_LOGIN_ON_GET = True
+ACCOUNT_LOGOUT_ON_GET = True
+
+# Faz o login direto se o GitHub fornecer um e-mail verificado
+SOCIALACCOUNT_AUTO_SIGNUP = True
+
+# Pede o e-mail do usuário (útil para o GitHub)
+ACCOUNT_EMAIL_REQUIRED = True
+
+# Garante que o processo de cadastro não peça confirmação extra se os dados já existirem
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+
+# Exibe os e-mails no console em vez de tentar enviar de verdade
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
