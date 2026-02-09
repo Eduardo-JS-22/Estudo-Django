@@ -1,5 +1,5 @@
 from django.contrib import admin
-from gallery.models import Image
+from apps.gallery.models import Image
 
 class ImageAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'legend', 'category', 'published')

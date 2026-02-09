@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
-from gallery.models import Image
+from apps.gallery.models import Image
 from django.contrib import messages
 
 def index(request):
