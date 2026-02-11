@@ -26,7 +26,7 @@ def search(request):
         search_term = request.GET['search']
         if search_term:
             images = images.filter(description__icontains=search_term)
-            return render(request, 'gallery/search.html', {'cards': images, 'search_term': search_term})
+            return render(request, 'gallery/index.html', {'cards': images, 'search_term': search_term})
     return render(request, 'gallery/search.html')
 
 def new_image(request):
@@ -52,7 +52,17 @@ def edit_image(request, image_id):
         return redirect('login')
     
     # Lógica para editar uma imagem existente (formulário, validação, etc.)
-    return HttpResponse(f"Página de edição da imagem {image_id}")
+    image = Image.objects.get(pk=image_id)
+    form = ImageForm(instance=image)
+
+    if request.method == 'POST':
+        form = ImageForm(request.POST, request.FILES, instance=image)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Imagem atualizada com sucesso!")
+            return redirect('image', image_id=image.id) 
+    
+    return render(request, 'gallery/edit_image.html', {'form': form, 'image': image})
 
 def delete_image(request, image_id):
     if not request.user.is_authenticated:
@@ -60,4 +70,15 @@ def delete_image(request, image_id):
         return redirect('login')
     
     # Lógica para deletar uma imagem existente (confirmação, etc.)
-    return HttpResponse(f"Página de confirmação para deletar a imagem {image_id}")
+    image = Image.objects.get(pk=image_id)
+    image.delete()
+    messages.success(request, "Imagem deletada com sucesso!")
+    return redirect('index')
+
+def filter(request, category):
+    if not request.user.is_authenticated:
+        messages.error(request, "Você precisa estar logado para acessar esta função.")
+        return redirect('login')
+    
+    images = Image.objects.order_by('-image_date').filter(published=True, category=category)
+    return render(request, 'gallery/index.html', {'cards': images, 'category': category})
