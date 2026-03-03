@@ -1,10 +1,14 @@
 from rest_framework import serializers
 from school.models import Student, Course, Registration
+from school.validates import validate_student
 
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = ['id', 'name', 'email', 'cpf', 'birth_date', 'phone_number']
+
+    def validate(self, data):
+        return validate_student(self, data)
 
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
