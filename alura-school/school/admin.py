@@ -6,12 +6,14 @@ class StudentAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'name')
     list_per_page = 20
     search_fields = ('name', 'email', 'cpf')
+    ordering = ('name', 'cpf')
 
 class CourseAdmin(admin.ModelAdmin):
     list_display = ('id', 'code', 'description', 'level')
     list_display_links = ('id', 'code')
     list_per_page = 20
     search_fields = ('code', 'level')
+    ordering = ('code', 'level')
 
 class RegistrationAdmin(admin.ModelAdmin):
     list_display = ('id', 'student', 'course', 'period')
